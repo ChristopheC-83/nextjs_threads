@@ -12,8 +12,8 @@ export default function ConnectedHeader() {
   const pathname = usePathname();
   return (
     <header className="relative flex items-center justify-between p-7">
-      <Image src="/logo.png" alt="threads" width={40} height={40} />
-      <nav className="absolute inset-0 flex items-center justify-center gap-4 py-4 ">
+      <Image src="/logo.png" alt="threads" width={40} height={40} className="z-10"/>
+      <nav className="absolute inset-0 z-0 flex items-center justify-center gap-4 py-4">
         <Link href="/">
           <PiHouseFill
             className={`w-14 h-14 transition duration-200 text-threads-gray-light hover:text-white hover:bg-neutral-800 p-1 rounded-xl ${
@@ -29,8 +29,8 @@ export default function ConnectedHeader() {
           />
         </Link>
       </nav>
-      <div>
-        <Button withoutMarginTop>Se connecter</Button>
+      <div className="z-10">
+        <Link href="/login"><Button withoutMarginTop  >Se connecter</Button></Link>
       </div>
     </header>
   );
