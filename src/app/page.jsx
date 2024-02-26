@@ -1,5 +1,9 @@
+import ConnectedLayout from "@/components/ConnectedLayout/ConnectedLayout";
 import Image from "next/image";
 
 export default function Index() {
-  return <div>Accueil </div>;
+  return (
+    <ConnectedLayout>Accueil</ConnectedLayout>
+    
+    );
 }
