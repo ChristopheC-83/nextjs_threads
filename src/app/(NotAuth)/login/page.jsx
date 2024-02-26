@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <div className="flex flex-col gap-4">
       {/* title */}
-      <h1 className="text-xl font-bold text-center">
+      <h1 className="title">
         Comment souhaitez-vous utiliser Threads ?
       </h1>
       <div className="mx-auto w-[500px] flex flex-col gap-4">
