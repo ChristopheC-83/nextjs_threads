@@ -5,18 +5,43 @@
 import { createUser } from "@/actions/createUser";
 import Button from "@/components/Button/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { PiArrowLeftLight } from "react-icons/pi";
+import { toast } from "sonner";
+
 
 export default function SignUp() {
+
+  const router = useRouter();
+  
+  function validationInputs(username, pseudo, email, password) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!username || !pseudo || !email || !password) {
+      toast.error("Veuillez remplir tous les champs");
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      toast.error("Veuillez remplir un email valide");
+      return false;
+    }
+    return true;
+  }
+  
   async function prepareCreateUser(formData) {
     const username = formData.get("username");
     const pseudo = formData.get("pseudo");
     const email = formData.get("email");
     const password = formData.get("password");
-
-    console.log(username, pseudo, email, password);
-
-    await createUser(username, pseudo, email, password);
+    if (!validationInputs(username, pseudo, email, password)) {
+      return;
+    }
+    try {
+      await createUser(username, pseudo, email, password);
+    } catch (error) {
+      return toast.error("Erreur lors de la création de l'utilisateur");
+    }
+    toast.success("Votre compte a bien été créé! Connectez-vous!");
+    router.push("/login/signin")
   }
 
   return (
