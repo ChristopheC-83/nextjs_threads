@@ -2,6 +2,7 @@
 // page d'enregistrement
 "use client";
 
+
 import { createUser } from "@/actions/createUser";
 import Button from "@/components/Button/Button";
 import Link from "next/link";
@@ -9,11 +10,9 @@ import { useRouter } from "next/navigation";
 import { PiArrowLeftLight } from "react-icons/pi";
 import { toast } from "sonner";
 
-
 export default function SignUp() {
-
   const router = useRouter();
-  
+
   function validationInputs(username, pseudo, email, password) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!username || !pseudo || !email || !password) {
@@ -26,7 +25,7 @@ export default function SignUp() {
     }
     return true;
   }
-  
+
   async function prepareCreateUser(formData) {
     const username = formData.get("username");
     const pseudo = formData.get("pseudo");
@@ -36,12 +35,15 @@ export default function SignUp() {
       return;
     }
     try {
+      console.log(username, pseudo, email, password);
       await createUser(username, pseudo, email, password);
     } catch (error) {
-      return toast.error("Erreur lors de la création de l'utilisateur");
+       toast.error("Erreur lors de la création de l'utilisateur");
+       toast.error(error.message);
+       return
     }
     toast.success("Votre compte a bien été créé! Connectez-vous!");
-    router.push("/login/signin")
+    router.push("/login/signin");
   }
 
   return (
