@@ -27,11 +27,11 @@ export async function createUser(username, pseudo, email, password) {
   // connexion à mongodb db
   const db = client.db(process.env.MONGODB_DATABASE);
   
-  console.log("truc1")
+  console.log("truc_1")
   // test de la creation du user
   try {
     
-    console.log("truc2")
+    console.log("truc_2")
     // email utilisé ?
     let user= await db.collection("users").find({ email}).limit(1).toArray();
     if (user.length !== 0) {
@@ -48,7 +48,7 @@ export async function createUser(username, pseudo, email, password) {
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     // Créer user
-    console.log("truc3")
+    console.log("truc_3")
     await db.collection("users").insertOne({
       username, 
       pseudo,
