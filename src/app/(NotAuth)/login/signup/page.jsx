@@ -38,7 +38,7 @@ export default function SignUp() {
       console.log(username, pseudo, email, password);
       await createUser(username, pseudo, email, password);
     } catch (error) {
-       toast.error("Erreur lors de la création de l'utilisateur");
+      //  toast.error("Erreur lors de la création de l'utilisateur");
        toast.error(error.message);
        return
     }

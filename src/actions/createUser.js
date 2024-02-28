@@ -1,7 +1,6 @@
-"use server"
+"use server";
 import { MongoClient } from "mongodb";
 import bcrypt from "bcrypt";
-
 
 function validationInputs(username, pseudo, email, password) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,20 +25,17 @@ export async function createUser(username, pseudo, email, password) {
   const client = await MongoClient.connect(process.env.MONGODB_CLIENT);
   // connexion à mongodb db
   const db = client.db(process.env.MONGODB_DATABASE);
-  
-  console.log("truc_1")
+
   // test de la creation du user
   try {
-    
-    console.log("truc_2")
     // email utilisé ?
-    let user= await db.collection("users").find({ email}).limit(1).toArray();
+    let user = await db.collection("users").find({ email }).limit(1).toArray();
     if (user.length !== 0) {
       await client.close();
       throw new Error("Cet email est déjà utilisé");
     }
     // pour le pseudo
-    user= await db.collection("users").find({ pseudo}).limit(1).toArray();
+    user = await db.collection("users").find({ pseudo }).limit(1).toArray();
     if (user.length !== 0) {
       await client.close();
       throw new Error("Ce pseudo est déjà utilisé");
@@ -48,23 +44,19 @@ export async function createUser(username, pseudo, email, password) {
     const encryptedPassword = await bcrypt.hash(password, 10);
 
     // Créer user
-    console.log("truc_3")
     await db.collection("users").insertOne({
-      username, 
+      username,
       pseudo,
       email,
       password: encryptedPassword,
-      profile : "/picture.png",
-      bio:"-",
-      url : "",
-      creation : new Date(),
-    })
-    
-    
+      profile: "/picture.png",
+      bio: "-",
+      url: "",
+      creation: new Date(),
+    });
   } catch (error) {
     await client.close();
-    throw new Error("Erreur lors de la connexion à la base de données");
+    throw new Error(error.message);
   }
   await client.close();
-
 }
