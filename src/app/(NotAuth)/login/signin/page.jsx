@@ -32,7 +32,7 @@ export default function SignIn() {
           placeholder="Mot de Passe"
           className="input"
         />
-        <Button>
+        <Button formButton>
           <p className="text-xl font-bold">Connexion</p>
         </Button>
       </form>

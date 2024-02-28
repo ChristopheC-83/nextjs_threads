@@ -78,7 +78,7 @@ export default function SignUp() {
           placeholder="Mot de Passe"
           className="input"
         />
-        <Button>
+        <Button formButton>
           <p className="text-xl font-bold">S'inscrire</p>
         </Button>
       </form>
