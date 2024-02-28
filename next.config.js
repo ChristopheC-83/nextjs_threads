@@ -25,6 +25,8 @@ module.exports = (env) => {
         MONGODB_CLIENT:
           "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
         MONGODB_DATABASE: "threads",
+        NEXTAUTH_SECRET:
+          "chaineAléatoireDeCaractèresPourLaSécuritéDeL'application",
       },
     };
   } else {
@@ -33,6 +35,8 @@ module.exports = (env) => {
         MONGODB_CLIENT:
           "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
         MONGODB_DATABASE: "threads",
+        NEXTAUTH_SECRET:
+          "chaineAléatoireDeCaractèresPourLaSécuritéDeL'application",
       },
     };
   }
