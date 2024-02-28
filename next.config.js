@@ -16,27 +16,27 @@
 
 // export default getConfig;
 
-// const { PHRASE_DEVELOPMENT_SERVER } = require("next/constants");
+const { PHRASE_DEVELOPMENT_SERVER } = require("next/constants");
 
-// module.exports = (env) => {
-//   if (env == PHRASE_DEVELOPMENT_SERVER) {
-//     return {
-//       env: {
-//         MONGODB_CLIENT:
-//           "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-//         MONGODB_DATABASE: "threads",
-//       },
-//     };
-//   } else {
-//     return {
-//       env: {
-//         MONGODB_CLIENT:
-//           "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-//         MONGODB_DATABASE: "threads",
-//       },
-//     };
-//   }
-// };
+module.exports = (env) => {
+  if (env == PHRASE_DEVELOPMENT_SERVER) {
+    return {
+      env: {
+        MONGODB_CLIENT:
+          "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        MONGODB_DATABASE: "threads",
+      },
+    };
+  } else {
+    return {
+      env: {
+        MONGODB_CLIENT:
+          "mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        MONGODB_DATABASE: "threads",
+      },
+    };
+  }
+};
 
 // /** @type {import('next').NextConfig} */
 // const nextConfig = (env) => {

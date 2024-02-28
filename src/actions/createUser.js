@@ -23,9 +23,9 @@ export async function createUser(username, pseudo, email, password) {
   console.log(username, pseudo, email, password);
 
   // connexion au cluster
-  const client = await MongoClient.connect("mongodb+srv://christophechiappetta:BwUUh89brKLIheYD@cluster0.1uhyagj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+  const client = await MongoClient.connect(process.env.MONGODB_CLIENT);
   // connexion à mongodb db
-  const db = client.db("threads");
+  const db = client.db(process.env.MONGODB_DATABASE);
   
   console.log("truc1")
   // test de la creation du user
