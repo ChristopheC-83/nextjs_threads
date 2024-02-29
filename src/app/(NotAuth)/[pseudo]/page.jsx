@@ -1,30 +1,64 @@
+"use client";
+
 import ConnectedLayout from "@/components/ConnectedLayout/ConnectedLayout";
 import Post from "@/components/Post/Post";
 import Image from "next/image";
 import { posts } from "@/lib/post";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Profile({ params }) {
   const pseudo = params.pseudo.slice(3); // pour enlever le %40 en début de slug
-  // console.log("params :",{params})
-  // console.log("pseudo :",{pseudo})
+
+  //  recup des infos dans un state
+  const [user, setUser] = useState([]);
+  const [posts, setPosts] = useState([]);
+
+  async function fetchUserDataPosts() {
+    const response = await fetch(`/api/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pseudo }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!response.ok) {
+      toast.error("Erreur lors de la récupération des données");
+    }
+    setUser(data.user);
+    setPosts(data.posts);
+  }
+
+  useEffect(() => {
+    if (!pseudo) {
+      notFound();
+    }
+    fetchUserDataPosts();
+  });
 
   return (
     <ConnectedLayout>
       <div className="w-11/12  md:w-[700px] mx-auto">
         <div className="flex justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold">{pseudo}</h1>
-            <div className="mt-2 text-threads-gray-light">@{pseudo}</div>
-            <div className="mt-5 whitespace-pre-line">-</div>
+            <h1 className="text-3xl font-semibold">{user.username}</h1>
+            <div className="mt-2 text-threads-gray-light">@{user.pseudo}</div>
+            <div className="mt-5 whitespace-pre-line">{user.bio}</div>
             <div className="mt-5 text-blue-500 duration-200 hover:text-blue-400">
-              <a href="#" target="_blank">
-                Coucou
-              </a>
+              {user.url && (
+                <a href={user.url} target="_blank">
+                  {user.url}
+                </a>
+              )}
             </div>
           </div>
           <div>
             <Image
-              src="/picture.png"
+              src={user.profile}
               width={100}
               height={100}
               className="object-cover rounded-full"

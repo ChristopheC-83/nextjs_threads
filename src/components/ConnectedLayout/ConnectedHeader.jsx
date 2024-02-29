@@ -14,8 +14,6 @@ export default function ConnectedHeader({ session }) {
   const pathname = usePathname();
   console.log(session);
 
-  
-
   return (
     <header className="relative flex items-center justify-between p-7">
       <Image
@@ -40,6 +38,17 @@ export default function ConnectedHeader({ session }) {
             }`}
           />
         </Link>
+        {session?.user?.email && (
+          <Link href={`/@${session?.user?.pseudo}`}>
+            <Image
+              src={session?.user?.profile}
+              width={40}
+              height={40}
+              className="object-cover rounded-full"
+              alt="avatar"
+            />
+          </Link>
+        )}
       </nav>
       <div className="z-10">
         <Link href="/login">

@@ -12,6 +12,14 @@ module.exports = (env) => {
         // A modif avant déploiement
         NEXTAUTH_URL: "http://localhost:3000",
       },
+      images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "mycloud.barpat.fun",
+          },
+        ],
+      },
     };
   } else {
     return {
@@ -24,6 +32,15 @@ module.exports = (env) => {
         // A modif avant déploiement
         NEXTAUTH_URL: "http://localhost:3000",
       },
+      images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "mycloud.barpat.fun",
+          },
+        ],
+      },
     };
   }
 };
+
