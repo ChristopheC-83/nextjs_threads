@@ -45,3 +45,10 @@
   @apply w-full py-3 mt-3 text-center duration-150 border cursor-pointer border-threads-gray-light rounded-xl hover:bg-threads-gray-light;
 }
 
+.new-thread-btn {
+  @apply px-4 py-2 mt-4 transition duration-300 rounded-full bg-neutral-100 text-neutral-900 hover:bg-neutral-300;
+}
+
+.disabled-new-thread-btn {
+  @apply bg-opacity-50 pointer-events-none cursor-none hover:bg-opacity-50 hover:bg-neutral-100;
+}
