@@ -3,14 +3,26 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
-import Button from "../Button/Button";
+import { toast } from "sonner";
+import createPost from "@/actions/createPost";
 
 export default function NewPostForm() {
   const { data: session } = useSession();
   const [textarea, setTextarea] = useState("");
 
+  async function onPrepare(formData) {
+    try {
+      await createPost(formData);
+      setTextarea("");
+      toast.success("Post publié");
+    } catch (error) {
+      console.error(error);
+      return toast.error(error.message);
+    }
+  }
+
   return (
-    <form>
+    <form action={onPrepare}>
       <div className="flex gap-3">
         <div>
           <Image
@@ -32,7 +44,11 @@ export default function NewPostForm() {
         </div>
       </div>
       <div className="flex justify-end">
-        <button className={`new-thread-btn ${textarea.length <1 && "disabled-new-thread-btn"}`}>
+        <button
+          className={`new-thread-btn ${
+            textarea.length < 1 && "disabled-new-thread-btn"
+          }`}
+        >
           Publier
         </button>
       </div>
