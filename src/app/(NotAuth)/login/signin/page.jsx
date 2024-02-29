@@ -45,7 +45,7 @@ export default function SignIn() {
     } catch (error) {
       toast.error(error.message);
     }
-    toast.success("Vous êtes connecté!");
+    toast.success("Vous êtes connecté !");
     // replace au lieu de push pour éviter le retour en arrière
     router.replace("/");
   }

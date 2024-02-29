@@ -1,7 +1,12 @@
 "use client";
 import { useFormStatus } from "react-dom";
 
-export default function Button({ onClick, children, withoutMarginTop, formButton }) {
+export default function Button({
+  onClick,
+  children,
+  withoutMarginTop,
+  formButton,
+}) {
   const { pending } = useFormStatus();
   return (
     <button

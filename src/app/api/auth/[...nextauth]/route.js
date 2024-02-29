@@ -7,10 +7,7 @@ export const authOptions = {
   providers: [
     Credentials({
       name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
+      credentials: {},
       async authorize(credentials) {
         const { email, password } = credentials;
         try {
@@ -60,7 +57,7 @@ export const authOptions = {
             url: user.url,
           }))[0];
           await client.close();
-          
+
           return user;
         } catch (e) {
           throw new Error(e.message);
@@ -76,9 +73,18 @@ export const authOptions = {
   pages: {
     signIn: "/login/signin",
   },
-  callbacks: {},
+  callbacks: {
+    async jwt({ token, user }) {
+      user && (token.user = user);
+      return token;
+    },
+    async session({ session, user, token }) {
+      session.user = token.user;
+      return session;
+    },
+  },
 };
 
 // on envoie l'objet user créé à nextauth
 const handler = NextAuth(authOptions);
-export  {handler as GET, handler as POST};
+export { handler as GET, handler as POST };
