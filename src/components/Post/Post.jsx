@@ -1,5 +1,7 @@
+import moment from "moment-timezone";
 import Image from "next/image";
 import Link from "next/link";
+import "moment/locale/fr";
 
 export default function Post({ post }) {
   return (
@@ -18,9 +20,16 @@ export default function Post({ post }) {
           <Link href={`/@${post.pseudo}`}>
             <b>{post.pseudo}</b>
           </Link>
-          <div className="text-sm text-threads-gray-light">Il y a 1 heure</div>
+          <div className="text-sm text-threads-gray-light">
+            {moment
+              .utc(post.creation, "YYYY-MM-DDTHH:mm:ss.SSSZ")
+              .tz("Europe/Paris")
+              .fromNow()}
+          </div>
         </div>
-        <div className="mt-3 whitespace-pre-line text-neutral-20">{post.content}</div>
+        <div className="mt-3 whitespace-pre-line text-neutral-20">
+          {post.content}
+        </div>
       </div>
     </div>
   );
