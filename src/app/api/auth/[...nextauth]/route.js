@@ -80,6 +80,33 @@ export const authOptions = {
     },
     async session({ session, user, token }) {
       session.user = token.user;
+
+      const { email } = session.user;
+      let client;
+      client = await MongoClient.connect(process.env.MONGODB_CLIENT);
+      const db = client.db(process.env.MONGODB_DATABASE);
+
+      let userDb = await db
+        .collection("users")
+        .find({ email })
+        .limit(1)
+        .toArray();
+
+      userDb = userDb.map((user) => ({
+        _id: user._id.toString(),
+        username: user.username,
+        pseudo: user.pseudo,
+        email: user.email,
+        profile: user.profile,
+      }))[0];
+
+      await client.close();
+
+      session = {
+        ...session,
+        user: { ...userDb },
+      };
+
       return session;
     },
   },

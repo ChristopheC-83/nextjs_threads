@@ -32,6 +32,7 @@ export default function NewPostForm({ closeModale = () => {} }) {
             width={50}
             height={50}
             className="mt-5 rounded-full"
+            unoptimized
           />
         </div>
         <div className="flex-1">
