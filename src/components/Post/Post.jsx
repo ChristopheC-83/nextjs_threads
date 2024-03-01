@@ -33,6 +33,7 @@ export default function Post({ post }) {
           width={50}
           height={50}
           className="object-cover rounded-full"
+          unoptimized
         />
       </div>
       <div className="w-full text-white">

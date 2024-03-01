@@ -1,19 +1,29 @@
 "use client";
 
+import Button from "@/components/Button/Button";
 import ConnectedLayout from "@/components/ConnectedLayout/ConnectedLayout";
 import Post from "@/components/Post/Post";
+import { set } from "mongoose";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "sonner";
 
 export default function Profile({ params }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const pseudo = params.pseudo.slice(3); // pour enlever le %40 en début de slug
 
   //  recup des infos dans un state
   const [user, setUser] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [openModale, setOpenModale] = useState(false);
+  const [profileInput, setProfileInput] = useState("");
+  const [bioInput, setBioInput] = useState("");
+  const [linkInput, setLinkInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchUserDataPosts() {
     const response = await fetch(`/api/user`, {
@@ -30,13 +40,22 @@ export default function Profile({ params }) {
     if (!response.ok) {
       toast.error("Erreur lors de la récupération des données");
     }
-    if(!data.user){
-      router.push("/")
+    if (!data.user) {
+      router.push("/");
       toast.info("Utilisateur introuvable");
-      return
+      return;
     }
     setUser(data.user);
     setPosts(data.posts);
+  }
+
+  async function edit() {
+    // les inputs
+    setProfileInput(user.profile);
+    setBioInput(user.bio);
+    setLinkInput(user.url);
+    // ouvrir le modal
+    setOpenModale(true);
   }
 
   useEffect(() => {
@@ -46,8 +65,122 @@ export default function Profile({ params }) {
     fetchUserDataPosts();
   }, []);
 
+  async function editUser() {
+    if (isLoading) return;
+    setIsLoading(true);
+    const response = await fetch(`/api/user/edit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pseudo,
+        profile: profileInput,
+        bio: bioInput,
+        url: linkInput,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      setIsLoading(false);
+      toast.error("Erreur lors de la modification du profil");
+      return;
+    }
+
+    const newUser = {
+      ...user,
+      profile: profileInput,
+      bio: bioInput,
+      url: linkInput,
+    };
+    setIsLoading(false);
+    setUser(newUser);
+    setOpenModale(false);
+    toast.success("Profil modifié");
+  }
+
   return (
     <ConnectedLayout>
+      {openModale &&
+        createPortal(
+          <div
+            className="modale-background"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setOpenModale(false);
+              }
+            }}
+          >
+            <div className="modale-user-foreground">
+              {/*  photo*/}
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <label htmlFor="" className="label" htlmFor="picture">
+                    Photo de Profil
+                  </label>
+                  <input
+                    type="url"
+                    name="picture"
+                    id="picture"
+                    className="input"
+                    placeholder="https://www..."
+                    value={profileInput}
+                    onChange={(e) => setProfileInput(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Image
+                    src={profileInput}
+                    width={100}
+                    height={100}
+                    className="object-cover rounded-full"
+                    alt="avatar"
+                    unoptimized
+                  />
+                </div>
+              </div>
+              {/* bio */}
+              <div className="mt-5">
+                <label htmlFor="bio" className="label">
+                  Bio
+                </label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  className="input"
+                  placeholder="Bio"
+                  value={bioInput}
+                  onChange={(e) => setBioInput(e.target.value)}
+                ></textarea>
+              </div>
+              {/* url */}
+              <div className="mt-5">
+                <label htmlFor="url" className="label">
+                  Lien
+                </label>
+                <input
+                  type="url"
+                  name="url"
+                  id="url"
+                  className="input"
+                  placeholder="https://www..."
+                  value={linkInput}
+                  onChange={(e) => setLinkInput(e.target.value)}
+                />
+              </div>
+              <div className="flex justify-end mt-1">
+                <div>
+                  <Button onClick={editUser} disabled={isLoading}>
+                    Terminer
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
       <div className="w-11/12  md:w-[700px] mx-auto">
         <div className="flex justify-between gap-4">
           <div>
@@ -69,9 +202,16 @@ export default function Profile({ params }) {
               height={100}
               className="object-cover rounded-full"
               alt="avatar"
+              unoptimized
             />
           </div>
         </div>
+        {/* modifier profil */}
+        {session?.user?.pseudo === pseudo && (
+          <div className="user-button" onClick={edit}>
+            Modifier le profil
+          </div>
+        )}
 
         {/* tabs */}
         <div className="flex mt-10">
