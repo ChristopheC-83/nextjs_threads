@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import createPost from "@/actions/createPost";
 
-export default function NewPostForm() {
+export default function NewPostForm({ closeModale = () => {} }) {
   const { data: session } = useSession();
   const [textarea, setTextarea] = useState("");
 
@@ -19,6 +19,7 @@ export default function NewPostForm() {
       console.error(error);
       return toast.error(error.message);
     }
+    closeModale();
   }
 
   return (

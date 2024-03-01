@@ -3,11 +3,12 @@
 import ConnectedLayout from "@/components/ConnectedLayout/ConnectedLayout";
 import Post from "@/components/Post/Post";
 import Image from "next/image";
-import { posts } from "@/lib/post";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function Profile({ params }) {
+  const router = useRouter();
   const pseudo = params.pseudo.slice(3); // pour enlever le %40 en début de slug
 
   //  recup des infos dans un state
@@ -29,16 +30,21 @@ export default function Profile({ params }) {
     if (!response.ok) {
       toast.error("Erreur lors de la récupération des données");
     }
+    if(!data.user){
+      router.push("/")
+      toast.info("Utilisateur introuvable");
+      return
+    }
     setUser(data.user);
     setPosts(data.posts);
   }
 
   useEffect(() => {
-    if (!pseudo) {
-      notFound();
-    }
+    // if (!pseudo) {
+    //   router.push("/")
+    // }
     fetchUserDataPosts();
-  });
+  }, []);
 
   return (
     <ConnectedLayout>
