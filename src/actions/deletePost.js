@@ -12,7 +12,7 @@ export default async function deletePost(postId) {
 
   // pas de user ?
   if (!session.user) {
-    throw new Error("Vous devez être connecté pour publier un post");
+    throw new Error("Vous devez être connecté pour publier un post !");
   }
 
   let client;

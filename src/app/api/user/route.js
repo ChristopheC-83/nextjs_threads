@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+
 export async function POST(request) {
   // recup du pseudo
   const data = await request.json();
